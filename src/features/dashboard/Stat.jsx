@@ -53,7 +53,7 @@ function Stat({ icon, title, value, color }) {
     <StyledStat>
       <Icon color={color}>{icon}</Icon>
       <Title>{title}</Title>
-      {!value ? <SpinnerMini /> : <Value>{value}</Value>}
+      {!value ? value === 0 ? 0 : <SpinnerMini /> : <Value>{value}</Value>}
     </StyledStat>
   );
 }

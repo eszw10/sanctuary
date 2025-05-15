@@ -2,17 +2,23 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getBookings } from "../../services/apiBookings";
 import { useSearchParams } from "react-router-dom";
 import { PAGE_SIZE } from "../../utils/constants";
+import { useBookingsFilter } from "../../context/BookingsFilterContext";
 
 export function useBookings() {
+  const { filters } = useBookingsFilter();
+  // const filters = [];
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
-  const filterValue = searchParams.get("status");
-  // FILTER
-  const filter =
-    !filterValue || filterValue === "all"
-      ? null
-      : { field: "status", value: filterValue, method: "eq" };
-
+  // const filterValue = searchParams.get("status");
+  // FILTER PARAMS
+  // const filter =
+  //   !filterValue || filterValue === "all"
+  //     ? null
+  //     : { field: "status", value: filterValue, method: "eq" };
+  // FILTERS
+  // const filter = filters.map((filter) =>
+  //   !filter.value || filter.value === "" ? null : filter
+  // );
   // SORT
   const sortByRaw = searchParams.get("sortBy") || "startDate-desc";
   const [field, direction] = sortByRaw.split("-");
@@ -27,8 +33,8 @@ export function useBookings() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["bookings", filter, sortBy, page],
-    queryFn: () => getBookings(filter, sortBy, page),
+    queryKey: ["bookings", filters, sortBy, page],
+    queryFn: () => getBookings(filters, sortBy, page),
   });
 
   const pageCount = Math.ceil(count / PAGE_SIZE);
@@ -36,15 +42,15 @@ export function useBookings() {
   // PRE-FETCHING
   if (page < pageCount) {
     queryClient.prefetchQuery({
-      queryKey: ["bookings", filter, sortBy, page + 1],
-      queryFn: () => getBookings(filter, sortBy, page + 1),
+      queryKey: ["bookings", filters, sortBy, page + 1],
+      queryFn: () => getBookings(filters, sortBy, page + 1),
     });
   }
 
   if (page > 1) {
     queryClient.prefetchQuery({
-      queryKey: ["bookings", filter, sortBy, page - 1],
-      queryFn: () => getBookings(filter, sortBy, page - 1),
+      queryKey: ["bookings", filters, sortBy, page - 1],
+      queryFn: () => getBookings(filters, sortBy, page - 1),
     });
   }
 

@@ -49,12 +49,21 @@ const variations = {
 };
 
 const Button = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   border: none;
   border-radius: var(--border-radius-sm);
   box-shadow: var(---shadow-sm);
   cursor: pointer;
   ${(props) => sizes[props.size]}
   ${(props) => variations[props.variation]}
+  
+  &:disabled {
+    opacity: 0.9;
+    background-color: var(--color-grey-400);
+    cursor: not-allowed;
+  }
 `;
 
 Button.defaultProps = {

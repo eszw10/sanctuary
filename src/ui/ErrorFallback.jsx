@@ -3,6 +3,7 @@ import Heading from "./Heading";
 import Button from "./Button";
 import { Global } from "recharts";
 import GlobalStyles from "../styles/GlobalStyles";
+import PropTypes from "prop-types";
 
 const StyledErrorFallback = styled.main`
   height: 100vh;
@@ -32,6 +33,10 @@ const Box = styled.div`
     margin-bottom: 3.2rem;
     color: var(--color-grey-500);
   }
+
+  & button {
+    margin: 0 auto;
+  }
 `;
 
 function ErrorFallback({ error, resetErrorBoundary }) {
@@ -50,5 +55,10 @@ function ErrorFallback({ error, resetErrorBoundary }) {
     </>
   );
 }
+
+ErrorFallback.propTypes = {
+  error: PropTypes.instanceOf(Error),
+  resetErrorBoundary: PropTypes.func,
+};
 
 export default ErrorFallback;

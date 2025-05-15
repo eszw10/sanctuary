@@ -81,7 +81,7 @@ function Menus({ children }) {
   );
 }
 
-function Toggle({ id }) {
+function Toggle({ id, children }) {
   const { openId, close, open, setPosition } = useContext(MenusContext);
 
   function handleClick(e) {
@@ -95,7 +95,7 @@ function Toggle({ id }) {
   }
   return (
     <StyledToggle onClick={handleClick}>
-      <HiEllipsisVertical />
+      {children ?? <HiEllipsisVertical />}
     </StyledToggle>
   );
 }

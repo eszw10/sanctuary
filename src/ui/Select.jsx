@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const StyledSelect = styled.select`
@@ -15,9 +15,14 @@ const StyledSelect = styled.select`
   box-shadow: var(--shadow-sm);
 `;
 
-function Select({ options, type, handleChange }) {
+function Select({ options, type, handleChange, handleClick, value }) {
   return (
-    <StyledSelect type={type} onChange={handleChange}>
+    <StyledSelect
+      type={type}
+      onChange={handleChange}
+      onClick={handleClick}
+      value={value}
+    >
       {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}
@@ -28,3 +33,11 @@ function Select({ options, type, handleChange }) {
 }
 
 export default Select;
+
+Select.propTypes = {
+  options: PropTypes.array.isRequired,
+  type: PropTypes.string,
+  handleChange: PropTypes.func,
+  handleClick: PropTypes.func,
+  value: PropTypes.string,
+};

@@ -17,6 +17,7 @@ import Booking from "./pages/Booking";
 import Checkin from "./pages/Checkin";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { DarkModeProvider } from "./context/DarkModeContext";
+import { BookingsFilterProvider } from "./context/BookingsFilterContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,31 +33,33 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools />
         <GlobalStyles />
-        <BrowserRouter>
-          <Routes>
-            {/* Layout route */}
-            <Route
-              element={
-                <ProtectedRoute>
-                  <AppLayout />
-                </ProtectedRoute>
-              }
-            >
-              {/* Outlet */}
-              <Route path="/" element={<Navigate replace to="dashboard" />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="account" element={<Account />} />
-              <Route path="bookings" element={<Bookings />} />
-              <Route path="bookings/:bookingId" element={<Booking />} />
-              <Route path="checkin/:bookingId" element={<Checkin />} />
-              <Route path="cabins" element={<Cabins />} />
-              <Route path="users" element={<Users />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
-            <Route path="login" element={<Login />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <BookingsFilterProvider>
+          <BrowserRouter>
+            <Routes>
+              {/* Layout route */}
+              <Route
+                element={
+                  <ProtectedRoute>
+                    <AppLayout />
+                  </ProtectedRoute>
+                }
+              >
+                {/* Outlet */}
+                <Route path="/" element={<Navigate replace to="dashboard" />} />
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="account" element={<Account />} />
+                <Route path="bookings" element={<Bookings />} />
+                <Route path="bookings/:bookingId" element={<Booking />} />
+                <Route path="checkin/:bookingId" element={<Checkin />} />
+                <Route path="cabins" element={<Cabins />} />
+                <Route path="users" element={<Users />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
+              <Route path="login" element={<Login />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </BookingsFilterProvider>
         <Toaster
           position="top-center"
           gutter={12}
