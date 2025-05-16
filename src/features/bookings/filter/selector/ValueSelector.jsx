@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import Input from "../../../../ui/Input";
 import { useBookingsFilter } from "../../../../context/BookingsFilterContext";
 import Select from "../../../../ui/Select";
+import { useSearchParams } from "react-router-dom";
 
 const statusOptions = [
   { label: "Status Type", value: "" },
@@ -18,6 +19,7 @@ export default function ValueSelector({
   isGroup = false,
 }) {
   const { dispatch } = useBookingsFilter();
+  const [searchParams, setSearchParams] = useSearchParams();
   function handleFilterChange(e) {
     let formattedValue;
     if (field === "totalPrice") {
@@ -45,6 +47,8 @@ export default function ValueSelector({
         },
       });
     }
+    searchParams.set("page", 1);
+    setSearchParams(searchParams);
   }
   if (field === "status")
     return (
