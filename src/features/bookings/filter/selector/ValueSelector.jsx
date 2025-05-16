@@ -4,6 +4,7 @@ import { useBookingsFilter } from "../../../../context/BookingsFilterContext";
 import Select from "../../../../ui/Select";
 
 const statusOptions = [
+  { label: "Status Type", value: "" },
   { label: "Unconfirmed", value: "unconfirmed" },
   { label: "Checked In", value: "checked-in" },
   { label: "Checked Out", value: "checked-out" },
@@ -12,7 +13,7 @@ const statusOptions = [
 
 export default function ValueSelector({
   id,
-  field = "cabin-name",
+  field = "cabins.name",
   value,
   isGroup = false,
 }) {

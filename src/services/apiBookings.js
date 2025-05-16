@@ -6,14 +6,15 @@ export async function getBookings(filters, sortBy, page) {
   const baseQuery = supabase
     .from("bookings")
     .select(
-      "id, created_at, startDate, endDate, numNights, numGuests, totalPrice, status, cabins(name), guests(fullName, email)",
+      "id, created_at, startDate, endDate, numNights, numGuests, totalPrice, status, cabins!inner(name), guests!inner(fullName, email)",
       { count: "exact" }
     );
+  // .eq("guests.fullName", "Erycson Zulkarnain Wijaya");
+
   // .or(
   //   "and(status.eq.unconfirmed, totalPrice.gt.1000),and(status.eq.checked-in, totalPrice.lt.7000)"
   // );
   let query = baseQuery;
-  // .eq("cabins(name)", "007");
 
   //FILTER PARAMS
   // if (filter) {
@@ -25,10 +26,10 @@ export async function getBookings(filters, sortBy, page) {
   const orConditions = [];
   let parentOperator;
 
-  function buildFilterQuery(filterItem, arr) {
+  function buildFilterQuery(filterItem, arr, orLogic, isGroup) {
     const { field, operator, value } = filterItem;
     if (!field || !operator || !value) return;
-    if (isOrLogic) {
+    if (orLogic || (isGroup && isOrLogic)) {
       if (field === "startDate" || field === "endDate") {
         arr.push(
           `${filterItem.field}.${filterItem.operator}.${new Date(
@@ -36,6 +37,7 @@ export async function getBookings(filters, sortBy, page) {
           ).toISOString()}`
         );
       }
+
       arr.push(
         `${filterItem.field}.${filterItem.operator}.${filterItem.value}`
       );
@@ -46,6 +48,7 @@ export async function getBookings(filters, sortBy, page) {
           new Date(filterItem.value).toISOString()
         );
       }
+
       query = query[filterItem.operator](filterItem.field, filterItem.value);
     }
   }
@@ -61,30 +64,31 @@ export async function getBookings(filters, sortBy, page) {
       // GROUP FILTERS
       if (filter.type === "group") {
         let items = [];
+        let isOrLogicGroup = false;
         if (filter.data.length > 0) {
           if (filter.logic === "or") {
-            isOrLogic = true;
+            isOrLogicGroup = true;
           }
           filter?.data?.forEach((item) => {
-            console.log(item);
-            buildFilterQuery(item, items);
+            buildFilterQuery(item, items, isOrLogicGroup, true);
           });
         }
         if (isOrLogic) {
-          if (parentOperator === "and") {
-            query = query.or(items.join(","));
-          } else {
-            orConditions.push(`${filter.logic}(${items.join(",")})`);
-          }
+          orConditions.push(
+            items.length > 1
+              ? `${filter.logic}(${items.join(",")})`
+              : items.join(",")
+          );
         }
+        isOrLogicGroup = false;
       }
 
       // RULE FILTERS
-      buildFilterQuery(filter, orConditions);
+      buildFilterQuery(filter, orConditions, isOrLogic, false);
     });
   }
   // If "or" logic is found, combine the conditions using .or()
-  if (isOrLogic && orConditions.length > 0) {
+  if (isOrLogic && orConditions?.length > 0) {
     query = query.or(orConditions.join(","));
   }
 
@@ -100,12 +104,15 @@ export async function getBookings(filters, sortBy, page) {
     query = query.range(from, to);
   }
 
-  const { data, error, count } = await query;
+  const { data = [], error, count } = await query;
 
   if (error) {
     console.log(error);
     throw new Error("Bookings could not be loaded");
   }
+
+  console.log(parentOperator);
+  console.log(orConditions);
 
   return { data, count };
 }

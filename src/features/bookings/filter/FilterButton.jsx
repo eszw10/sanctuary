@@ -4,6 +4,7 @@ import BookingsFilterContainer from "./bookingsFilter/BookingsFilterContainer";
 import { useState } from "react";
 import { useBookingsFilter } from "../../../context/BookingsFilterContext";
 import { IoFilter } from "react-icons/io5";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 const StyledContainer = styled.div`
   position: relative;
@@ -12,7 +13,7 @@ const StyledContainer = styled.div`
 const StyledButton = styled.button`
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.5rem;
   border: none;
   background-color: transparent;
   margin-top: auto;
@@ -32,8 +33,7 @@ const StyledButton = styled.button`
 
 export default function FilterButton() {
   const [isOpened, setIsOpened] = useState(false);
-  const { filters, dispatch } = useBookingsFilter();
-  console.log(filters);
+  const { filters } = useBookingsFilter();
   return (
     <StyledContainer>
       <StyledButton onClick={() => setIsOpened((value) => !value)}>
@@ -41,6 +41,7 @@ export default function FilterButton() {
           <>
             <IoFilter color="var(--color-brand-600)" />
             <span>{filters?.data?.length} rules</span>
+            <MdKeyboardArrowDown color="var(--color-brand-600)" />
           </>
         ) : (
           <>

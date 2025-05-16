@@ -7,10 +7,11 @@ import BookingRow from "./BookingRow";
 import { useBookings } from "./useBookings";
 
 function BookingTable() {
-  const { bookings, count, isLoading } = useBookings();
+  const { bookings, count, isLoading, error: isError } = useBookings();
 
   if (isLoading) return <Spinner />;
-  if (bookings.length === 0) return <Empty resourceName="bookings" />;
+  if (bookings.length === 0 || isError)
+    return <Empty resourceName="bookings" />;
 
   return (
     <Menus>

@@ -6,7 +6,7 @@ const stringOperators = [
   { label: "Choose Operation", value: "" },
   { label: "Equal", value: "eq" },
   { label: "Not Equal", value: "neq" },
-  { label: "Contains", value: "ilike" },
+  { label: "Contains", value: "textSearch" },
 ];
 
 const numberOperators = [
@@ -19,11 +19,9 @@ const numberOperators = [
   { label: "Less Than or Equal", value: "lte" },
 ];
 
-const dateOperators = [...numberOperators, { label: "Range", value: "range" }];
-
 export default function OperatorSelector({
   id,
-  field = "cabin-name",
+  field = "cabins-name",
   value = "eq",
   isGroup = false,
 }) {
@@ -52,17 +50,14 @@ export default function OperatorSelector({
   }
   let operators;
   if (
-    field === "cabin-name" ||
-    field === "guest-name" ||
+    field === "cabins.name" ||
+    field === "guests.fullName" ||
     field === "observations"
   ) {
     operators = stringOperators;
   }
-  if (field === "totalPrice") {
+  if (field === "totalPrice" || field === "startDate" || field === "endDate") {
     operators = numberOperators;
-  }
-  if (field === "startDate" || field === "endDate") {
-    operators = dateOperators;
   }
   if (!operators) return null;
   return (

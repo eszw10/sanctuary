@@ -104,6 +104,7 @@ export default function FilterGroup({ filters, id, isGroup = false }) {
               <ValueSelector
                 field={filter.field}
                 id={isGroup ? { dataId: id, filterId: filter.id } : filter.id}
+                operator={filter.operator}
                 value={filter?.value}
                 isGroup={isGroup}
               />
@@ -123,19 +124,17 @@ export default function FilterGroup({ filters, id, isGroup = false }) {
           </FilterContainer>
         );
       })}
-      {isGroup && !filters.data.length ? null : (
-        <div className="" style={{ display: "flex", gap: "8px", width: 300 }}>
-          <FilterTypeSelector id={id} isGroup={isGroup} />
-          <Button
-            variation="danger"
-            disabled={!filters?.data?.length}
-            onClick={() => handleDelete(isGroup, id)}
-          >
-            <BiTrash />
-            <span>Delete filter</span>
-          </Button>
-        </div>
-      )}
+      <div className="" style={{ display: "flex", gap: "8px", width: 300 }}>
+        <FilterTypeSelector id={id} isGroup={isGroup} />
+        <Button
+          variation="danger"
+          disabled={!filters?.data?.length}
+          onClick={() => handleDelete(isGroup, id)}
+        >
+          <BiTrash />
+          <span>Delete filter</span>
+        </Button>
+      </div>
     </StyledContainer>
   );
 }

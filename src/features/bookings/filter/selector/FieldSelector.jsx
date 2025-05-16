@@ -4,8 +4,8 @@ import { useBookingsFilter } from "../../../../context/BookingsFilterContext";
 
 const fields = [
   { label: "Choose Field", value: "" },
-  { label: "Cabin Name", value: "cabin-name" },
-  { label: "Guest Name", value: "guest-name" },
+  { label: "Cabin Name", value: "cabins.name" },
+  { label: "Guest Name", value: "guests.fullName" },
   { label: "Start Date", value: "startDate" },
   { label: "End Date", value: "endDate" },
   { label: "Status", value: "status" },
